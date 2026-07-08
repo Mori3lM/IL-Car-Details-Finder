@@ -318,12 +318,6 @@ code {
 .site-footer__wrap .disclaimer {
   margin: 0;
 }
-.site-footer__wrap nav {
-  margin-top: var(--space-3);
-  display: flex;
-  gap: var(--space-4);
-  flex-wrap: wrap;
-}
 
 /* --- hero (home) --------------------------------------------------------- */
 .hero {
