@@ -1,0 +1,49 @@
+/* Design tokens — colors verified against WCAG 2.1 AA contrast (see venture-plan/12). */
+:root {
+  --brand-700: #155a97;
+  --brand-600: #1e6fb8;
+  --brand-050: #eaf2fb;
+  --on-brand: #ffffff; /* text/icon on a brand-filled surface */
+  --ink-900: #0f172a;
+  --ink-600: #475569;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --bg: #f6f8fb;
+
+  --ok-700: #0f6b47;
+  --ok-050: #e7f5ee;
+  --warn-700: #8a5a12;
+  --warn-050: #fbf3e2;
+  --danger-700: #a5330a;
+  --danger-050: #fdeadf;
+
+  --border: #e2e8f0;      /* decorative hairline */
+  --border-ui: #8593a6;   /* interactive borders — meets 3:1 (WCAG 1.4.11) */
+  --radius: 14px;
+  --focus: 3px solid var(--brand-600);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --brand-700: #7cc0ff;
+    --brand-600: #64aef0;
+    --brand-050: #14304a;
+    --on-brand: #0f172a; /* dark text on the lighter dark-mode blue */
+    --ink-900: #f1f5f9;
+    --ink-600: #b6c2d2;
+    --surface: #16202e;
+    --surface-2: #1c2836;
+    --bg: #0f172a;
+
+    --ok-700: #7fe0b3;
+    --ok-050: #123227;
+    --warn-700: #f0c368;
+    --warn-050: #34290f;
+    --danger-700: #f6a184;
+    --danger-050: #3a1c12;
+
+    --border: #2b3a4d;
+    --border-ui: #6b7d93;
+    --focus: 3px solid var(--brand-600);
+  }
+}

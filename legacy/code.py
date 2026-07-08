@@ -1,3 +1,11 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ORIGINAL PROJECT — preserved for provenance.
+# Source: https://github.com/Mori3lM/IL-Car-Details-Finder  (code.py)
+# This is the original CLI the web app was rebuilt from. Kept here unchanged as a
+# reference; the field-translation dictionary and the data.gov.il resource id below
+# were ported into src/lib/govData/ . Not used by the web app at runtime.
+# ─────────────────────────────────────────────────────────────────────────────
+
 import urllib.request
 import json
 
@@ -48,7 +56,7 @@ try:
 
         found_car_data = search_car(api_url, user_input)
 
-        if 'result' in found_car_data: 
+        if 'result' in found_car_data:
             result = found_car_data['result']
             if 'records' in result:
                 records = result['records']
