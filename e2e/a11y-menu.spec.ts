@@ -9,7 +9,7 @@ test("accessibility menu: keyboard-operable, applies, and no axe violations when
   await page.goto("/");
 
   // Open via keyboard.
-  const fab = page.getByRole("button", { name: "תפריט נגישות" });
+  const fab = page.getByRole("button", { name: "תפריט נגישות", exact: true });
   await fab.focus();
   await expect(fab).toBeFocused();
   await page.keyboard.press("Enter");
@@ -34,7 +34,7 @@ test("accessibility menu: Esc closes, returns focus, and choices persist", async
   page,
 }) => {
   await page.goto("/");
-  const fab = page.getByRole("button", { name: "תפריט נגישות" });
+  const fab = page.getByRole("button", { name: "תפריט נגישות", exact: true });
   await fab.click();
   const dialog = page.getByRole("dialog", { name: "תפריט נגישות" });
   await expect(dialog).toBeVisible();
@@ -49,4 +49,12 @@ test("accessibility menu: Esc closes, returns focus, and choices persist", async
   // Choice persists across reload.
   await page.reload();
   await expect(page.locator("html")).toHaveClass(/a11y-highlight-links/);
+});
+
+test("footer link opens the accessibility menu (reliable in-flow entry point)", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "פתיחת תפריט נגישות" }).click();
+  await expect(page.getByRole("dialog", { name: "תפריט נגישות" })).toBeVisible();
 });

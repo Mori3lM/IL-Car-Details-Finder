@@ -47,12 +47,21 @@ export function AccessibilityMenu() {
   }, [settings]);
 
   // Native <dialog> handles focus-trap + Esc; return focus to the button on close.
+  // Also open on a global request event, so other UI (e.g. the footer link) can
+  // trigger the same menu — a reliable in-flow entry point alongside the FAB.
   useEffect(() => {
     const d = dialogRef.current;
     if (!d) return;
     const onClose = () => fabRef.current?.focus();
+    const onOpenRequest = () => {
+      if (!d.open) d.showModal();
+    };
     d.addEventListener("close", onClose);
-    return () => d.removeEventListener("close", onClose);
+    window.addEventListener("ilcf:open-a11y", onOpenRequest);
+    return () => {
+      d.removeEventListener("close", onClose);
+      window.removeEventListener("ilcf:open-a11y", onOpenRequest);
+    };
   }, []);
 
   // Base mutations on the LATEST persisted snapshot (not the render closure), so

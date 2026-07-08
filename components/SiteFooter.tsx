@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { A11yMenuButton } from "./A11yMenuButton";
 
 /** Richer site footer — navigation, data credit, and the indicative-data disclaimer. */
 export function SiteFooter() {
@@ -14,11 +15,18 @@ export function SiteFooter() {
             </p>
           </div>
 
+          <div className="site-footer__col">
+            <h2>נגישות</h2>
+            <Link href="/accessibility">הצהרת נגישות</Link>
+            <A11yMenuButton className="footer-linkish">
+              פתיחת תפריט נגישות
+            </A11yMenuButton>
+          </div>
+
           <nav className="site-footer__col" aria-label="קישורי מידע">
             <h2>מידע</h2>
             <Link href="/about-data">מאיפה הנתונים?</Link>
             <Link href="/privacy">מדיניות פרטיות</Link>
-            <Link href="/accessibility">הצהרת נגישות</Link>
           </nav>
 
           <nav className="site-footer__col" aria-label="ניווט">
