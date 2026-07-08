@@ -4,6 +4,8 @@ import { resolveVehicle } from "@/lib/api/resolveVehicle";
 import { RESOURCES } from "@/lib/govData/resources";
 import { formatPlate } from "@/lib/validation/plate";
 import { formatIsoDate } from "@/lib/format";
+import { buildVehicleJsonLd, serializeJsonLd } from "@/lib/seo";
+import { config } from "@/lib/config";
 import { SearchBox } from "@/components/SearchBox";
 import { VehicleCard } from "@/components/VehicleCard";
 import { StatusRow } from "@/components/StatusRow";
@@ -18,10 +20,24 @@ type Params = { params: Promise<{ plate: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { plate } = await params;
-  const pretty = formatPlate(plate.replace(/\D/g, ""));
+  const digits = plate.replace(/\D/g, "");
+  const pretty = formatPlate(digits);
+  const title = `כרטיס רכב · ${pretty}`;
+  const description = `פרטי רכב, סטטוס רישוי וטסט עבור מספר רישוי ${pretty} — ממקורות משרד התחבורה.`;
+  const path = `/car/${digits}`;
   return {
-    title: `כרטיס רכב · ${pretty}`,
-    description: `פרטי רכב, סטטוס רישוי וטסט עבור מספר רישוי ${pretty} — ממקורות משרד התחבורה.`,
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      title,
+      description,
+      url: path,
+      siteName: "כרטיס רכב",
+      locale: "he_IL",
+      type: "website",
+    },
+    twitter: { card: "summary", title, description },
   };
 }
 
@@ -54,9 +70,19 @@ export default async function CarPage({ params }: Params) {
   const report = result.report;
   const name =
     [report.manufacturer, report.model].filter(Boolean).join(" ") || "רכב";
+  const jsonLd = buildVehicleJsonLd(
+    report,
+    `${config.siteUrl.replace(/\/$/, "")}/car/${report.plate}`,
+  );
 
   return (
     <main id="main" className="page">
+      {/* schema.org/Vehicle — JSON-LD is escaped (serializeJsonLd) so untrusted
+          registry text cannot break out of the script element. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
       <SearchBox initialValue={report.plate} />
 
       <div

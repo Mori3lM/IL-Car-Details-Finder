@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Heebo } from "next/font/google";
 import "./globals.css";
+import { config } from "@/lib/config";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -12,12 +13,19 @@ const heebo = Heebo({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(config.siteUrl),
   title: {
     default: "בדיקת רכב לפי מספר רישוי — נתונים רשמיים",
     template: "%s | כרטיס רכב",
   },
   description:
     "הזינו מספר רישוי וקבלו כרטיס רכב נקי מנתוני משרד התחבורה הרשמיים (data.gov.il) — חינם, ללא הרשמה.",
+  applicationName: "כרטיס רכב",
+  openGraph: {
+    siteName: "כרטיס רכב",
+    locale: "he_IL",
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {

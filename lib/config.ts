@@ -19,6 +19,8 @@ export const config = {
     "GOV_API_BASE",
     "https://data.gov.il/api/3/action/datastore_search",
   ),
+  // Absolute base URL for canonical/OG/sitemap. Local default; prod sets SITE_URL.
+  siteUrl: readString("SITE_URL", "http://localhost:3000"),
   cache: {
     driver: readString("CACHE_DRIVER", "memory"),
     ttlSeconds: readNumber("CACHE_TTL_SECONDS", 86_400),
