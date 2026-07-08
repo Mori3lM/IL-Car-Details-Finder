@@ -37,3 +37,6 @@ yarn-error.log*
 
 # vite prototype leftovers (reference only, lives under legacy/)
 vite.config.ts.timestamp-*.mjs
+
+# local tooling (Claude preview launch config)
+.claude/
