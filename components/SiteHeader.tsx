@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CarIcon } from "./Icons";
 
-/** Site header — logo + wordmark, links home. Rendered by the root layout. */
+/** Site header — logo + wordmark (links home) and a link to the saved list. */
 export function SiteHeader() {
   return (
     <header className="site-header">
@@ -12,6 +12,9 @@ export function SiteHeader() {
           </span>
           <span>כרטיס רכב</span>
         </Link>
+        <nav className="site-nav" aria-label="ניווט ראשי">
+          <Link href="/my-cars">הרכבים שלי</Link>
+        </nav>
       </div>
     </header>
   );

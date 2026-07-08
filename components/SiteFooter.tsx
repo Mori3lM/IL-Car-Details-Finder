@@ -12,6 +12,7 @@ export function SiteFooter() {
         <nav aria-label="קישורי מידע">
           <Link href="/about-data">מאיפה הנתונים?</Link>
           <Link href="/privacy">פרטיות</Link>
+          <Link href="/my-cars">הרכבים שלי</Link>
         </nav>
       </div>
     </footer>

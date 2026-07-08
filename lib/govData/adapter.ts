@@ -3,12 +3,11 @@
 // Throws GovDataError on any upstream failure (the route maps that to a clean 502).
 
 import { GOV_API_BASE, RESOURCES } from "./resources";
-import type {
-  DetailField,
-  SourceRef,
-  ValidityStatus,
-  VehicleReport,
-} from "./types";
+import { computeValidity } from "@/lib/validity";
+import type { DetailField, SourceRef, VehicleReport } from "./types";
+
+// Re-exported so existing importers (and tests) can keep using it from the adapter.
+export { computeValidity };
 
 /** Raw record fields we rely on (all optional — the API can omit any). */
 interface RawRecord {
@@ -57,30 +56,6 @@ const clean = (v: unknown): string | undefined => {
   const s = String(v).trim();
   return s === "" || s === "null" ? undefined : s;
 };
-
-function stripTime(d: Date): number {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-}
-
-/** Compute licence/test validity from an ISO date string. Pure + unit-tested. */
-export function computeValidity(
-  dateStr: string | undefined,
-  label: string,
-  now: Date = new Date(),
-): ValidityStatus {
-  const iso = clean(dateStr);
-  if (!iso) return { label: `${label} — לא זמין`, level: "unknown" };
-  const target = new Date(iso + "T00:00:00");
-  if (Number.isNaN(target.getTime()))
-    return { label: `${label} — לא זמין`, level: "unknown" };
-
-  const days = Math.round((target.getTime() - stripTime(now)) / 86_400_000);
-  if (days < 0)
-    return { label: `${label} — פג תוקף`, level: "expired", date: iso, daysRemaining: days };
-  if (days <= 45)
-    return { label: `${label} — יש לחדש בקרוב`, level: "soon", date: iso, daysRemaining: days };
-  return { label: `${label} בתוקף`, level: "ok", date: iso, daysRemaining: days };
-}
 
 function buildDetails(r: RawRecord): DetailField[] {
   const out: DetailField[] = [];

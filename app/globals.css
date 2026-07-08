@@ -209,6 +209,18 @@ code {
   width: 18px;
   height: 18px;
 }
+.site-nav {
+  margin-inline-start: auto;
+}
+.site-nav a {
+  color: var(--brand-700);
+  text-decoration: none;
+  font-weight: 600;
+  padding: var(--space-2);
+}
+.site-nav a:hover {
+  text-decoration: underline;
+}
 
 .page {
   flex: 1;
@@ -594,16 +606,64 @@ code {
 }
 .saved-item {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: var(--space-3);
-  flex-wrap: wrap;
 }
 .saved-item__main {
   flex: 1;
   min-width: 0;
+  display: grid;
+  gap: var(--space-2);
+  justify-items: start;
 }
 .saved-item__name {
   font-weight: 600;
+  font-size: 1.05rem;
+}
+.saved-item__main .plate {
+  margin-bottom: 0;
+}
+.saved-item__main .info-line {
+  margin-top: 0;
+}
+.saved-item__actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-3);
+}
+
+/* reminder lead-time preference */
+.prefs {
+  display: grid;
+  gap: var(--space-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+.prefs label {
+  font-weight: 600;
+}
+.select {
+  font: inherit;
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid var(--border-ui);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink-900);
+  min-height: 44px;
+  max-width: 220px;
+}
+.select:focus-visible {
+  outline: 3px solid var(--brand-600);
+  outline-offset: 2px;
+  border-color: var(--brand-600);
 }
 .chip {
   display: inline-flex;

@@ -4,6 +4,7 @@
 
 import { useSyncExternalStore } from "react";
 import {
+  getPrefs,
   getSavedVehiclesSnapshot,
   subscribeToStorage,
   type SavedVehicle,
@@ -22,4 +23,15 @@ export function useSavedVehicles(): SavedVehicle[] {
 
 export function useIsSaved(plate: string): boolean {
   return useSavedVehicles().some((v) => v.plate === plate);
+}
+
+const DEFAULT_REMINDER_DAYS = 30;
+
+/** Reminder lead-time (days). A number primitive → stable snapshot. */
+export function useReminderDays(): number {
+  return useSyncExternalStore(
+    subscribeToStorage,
+    () => getPrefs().reminderDaysBefore,
+    () => DEFAULT_REMINDER_DAYS,
+  );
 }
