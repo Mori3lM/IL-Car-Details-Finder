@@ -122,6 +122,31 @@ Prove WCAG 2.1 AA per `12_ACCESSIBILITY.md` across home, result, my-cars — all
 **Verify:** `@axe-core/playwright` run locally = 0 errors; local Lighthouse a11y ≥95; record a manual
 keyboard + screen-reader pass with screenshots. **Not done on automated checks alone.**
 
+### M6 — UI polish: responsive desktop + accessibility menu + richer content (added from user feedback)
+Three things, all local:
+1. **Responsive desktop layout** (`06 §6`/`§7`): fluid container (`min(100% - 2rem, ~1120px)` on desktop),
+   fluid typography via `clamp()`, and a **two-column result layout ≥900px** (main details column +
+   sticky status/actions sidebar; single column on mobile with status first). Details grid uses
+   `auto-fit minmax(180px,1fr)`. Fix the "looks too small on desktop" problem. Keep consistent section
+   order and generous vertical rhythm.
+2. **Accessibility menu + statement** (`12 §4`, Israeli legal requirement): a self-built, keyboard-
+   accessible accessibility button/menu (font-size ±, high-contrast/dark toggle, highlight links, readable
+   font, stop animations, reset, link to statement) with choices persisted in `localStorage`; and an
+   `/accessibility` **הצהרת נגישות** page listing conformance (WCAG 2.1 AA + IS 5568), the actual
+   adjustments made, known limitations, a contact for accessibility issues, and a last-updated date. Do
+   NOT use a third-party overlay widget.
+3. **Richer content** (`06 §8`): home hero (value headline + subhead + search + trust line), "how it
+   works" (3 steps), "what you get" feature cards, an FAQ section (free? source? official? what's not
+   available? is data stored?) with `FAQPage` schema, and a richer footer (about-data, privacy,
+   accessibility statement, data.gov.il credit + disclaimer). Natural Hebrew copy.
+**DoD:** on a 1440px desktop the site fills the width and reads at a comfortable size (not a narrow mobile
+column); the accessibility menu works by keyboard, persists, and every control has an accessible name; the
+`/accessibility` statement page is present with real detail; new content sections render and are keyboard/
+screen-reader friendly; **M5's accessibility gate is re-run and still passes** (axe 0, Lighthouse a11y ≥95).
+**Verify:** screenshots at 1440/1024/768/375 showing proper scaling; keyboard-drive the a11y menu and
+confirm persistence across reload; re-run axe + Lighthouse on home/result/accessibility pages; the FAQ
+structured data validates.
+
 ## 6. Migration to production (LATER — do NOT build now; documented so the seams are right)
 When the user decides to go live, this is the whole migration (small, because of the seams):
 1. **Host:** deploy the same Next.js app to **Vercel** (or Render). No code change to routes.

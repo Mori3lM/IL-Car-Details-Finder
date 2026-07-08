@@ -49,8 +49,10 @@ test("my-cars (with saved cars) — no axe violations", async ({ page }) => {
   expect(violations).toEqual([]);
 });
 
-test("about-data & privacy — no axe violations", async ({ page }) => {
-  for (const path of ["/about-data", "/privacy"]) {
+test("about-data, privacy & accessibility statement — no axe violations", async ({
+  page,
+}) => {
+  for (const path of ["/about-data", "/privacy", "/accessibility"]) {
     await page.goto(path);
     const { violations } = await axe(page);
     expect(violations, `axe on ${path}`).toEqual([]);

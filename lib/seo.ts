@@ -32,6 +32,24 @@ export function buildVehicleJsonLd(
   return jsonLd;
 }
 
+export interface FaqItem {
+  q: string;
+  a: string;
+}
+
+/** schema.org/FAQPage JSON-LD from a list of Q&A pairs. */
+export function buildFaqJsonLd(items: FaqItem[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((it) => ({
+      "@type": "Question",
+      name: it.q,
+      acceptedAnswer: { "@type": "Answer", text: it.a },
+    })),
+  };
+}
+
 /**
  * Serialize JSON-LD for inline injection. Escapes `<` so untrusted registry text
  * can never break out of the <script> element (prevents </script> injection).

@@ -65,3 +65,19 @@ term/definition pairs, a live `status` region for save/reminder announcements, a
 The M5 gate passes: **axe 0 errors**, **Lighthouse a11y 100** (≥95 required) across the
 core pages, a passing keyboard pass, and a verified screen-reader semantic structure — in
 both light and dark themes.
+
+## M6 additions (accessibility menu + statement + responsive)
+
+- **Self-built accessibility menu** (`components/AccessibilityMenu.tsx`, no third-party
+  overlay): fixed ♿ button → native `<dialog>` (focus-trap + Esc for free). Controls: font
+  size ±, theme (auto/light/dark/high-contrast), highlight links, readable font, stop
+  animations, reset, and a link to the statement. Every control has an accessible name;
+  choices persist in `localStorage` and apply to `<html>`. Keyboard-driven open/apply/persist
+  and **axe-clean while open** are covered by `e2e/a11y-menu.spec.ts`.
+- **Accessibility statement** at `/accessibility` — conformance (WCAG 2.1 AA + ת״י 5568),
+  the adjustments made, known limitations, an accessibility contact (ai@nanoks.com), and a
+  last-updated date. axe-clean (`e2e/a11y.spec.ts`), Lighthouse a11y 100.
+- **Responsive desktop** — fluid container (up to ~1120px), `clamp()` typography, and a
+  two-column result page ≥900px (wide details + sticky status/actions; single column with
+  status first on mobile). Verified at 1440 / 1024 / 375, no horizontal overflow, 200% zoom
+  intact. Re-ran the full gate: axe 0, Lighthouse a11y 100×3.

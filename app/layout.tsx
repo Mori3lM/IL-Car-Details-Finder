@@ -4,6 +4,7 @@ import "./globals.css";
 import { config } from "@/lib/config";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { AccessibilityMenu } from "@/components/AccessibilityMenu";
 
 const heebo = Heebo({
   subsets: ["hebrew", "latin"],
@@ -48,6 +49,7 @@ export default function RootLayout({
         <SiteHeader />
         {children}
         <SiteFooter />
+        <AccessibilityMenu />
       </body>
     </html>
   );

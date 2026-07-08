@@ -98,3 +98,38 @@ export function ShieldIcon({ className = "ic" }: IconProps) {
     </svg>
   );
 }
+
+export function AccessibilityIcon({ className = "ic" }: IconProps) {
+  return (
+    <svg {...svgProps} className={className}>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="7.4" r="1.1" fill="currentColor" stroke="none" />
+      <path d="M6.7 9.6c1.7.9 3.5 1.3 5.3 1.3s3.6-.4 5.3-1.3" />
+      <path d="M12 10.9V15l-2.2 3.6M12 15l2.2 3.6" />
+    </svg>
+  );
+}
+
+export function PlusIcon({ className = "ic" }: IconProps) {
+  return (
+    <svg {...svgProps} className={className}>
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+export function MinusIcon({ className = "ic" }: IconProps) {
+  return (
+    <svg {...svgProps} className={className}>
+      <path d="M5 12h14" />
+    </svg>
+  );
+}
+
+export function CloseIcon({ className = "ic" }: IconProps) {
+  return (
+    <svg {...svgProps} className={className}>
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}

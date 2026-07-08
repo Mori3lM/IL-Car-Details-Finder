@@ -38,38 +38,104 @@
   --space-8: 32px;
 
   --measure: 640px;
+  --container: 1120px; /* wide desktop content width */
+  --container-prose: 720px; /* comfortable reading width for prose pages */
+  --section-gap: clamp(1.5rem, 4vw, 3rem); /* vertical rhythm between sections */
 
   --font-sans: var(--font-heebo), "Assistant", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Arial, sans-serif;
+  --font-readable: Arial, "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
 }
 
+/* Dark palette — shared by system-auto (no manual choice) and the forced
+   `dark` theme from the accessibility menu. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --brand-700: #7cc0ff;
     --brand-600: #64aef0;
     --brand-500: #4a9be0;
     --brand-050: #14304a;
     --on-brand: #0f172a;
-
     --ink-900: #f1f5f9;
     --ink-600: #b6c2d2;
-
     --surface: #16202e;
     --surface-2: #1c2836;
     --bg: #0f172a;
-
     --ok-700: #7fe0b3;
     --ok-050: #123227;
     --warn-700: #f0c368;
     --warn-050: #34290f;
     --danger-700: #f6a184;
     --danger-050: #3a1c12;
-
     --border: #2b3a4d;
     --border-ui: #6b7d93;
-
     --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
   }
+}
+:root[data-theme="dark"] {
+  --brand-700: #7cc0ff;
+  --brand-600: #64aef0;
+  --brand-500: #4a9be0;
+  --brand-050: #14304a;
+  --on-brand: #0f172a;
+  --ink-900: #f1f5f9;
+  --ink-600: #b6c2d2;
+  --surface: #16202e;
+  --surface-2: #1c2836;
+  --bg: #0f172a;
+  --ok-700: #7fe0b3;
+  --ok-050: #123227;
+  --warn-700: #f0c368;
+  --warn-050: #34290f;
+  --danger-700: #f6a184;
+  --danger-050: #3a1c12;
+  --border: #2b3a4d;
+  --border-ui: #6b7d93;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* High-contrast theme — near-max contrast, black borders (accessibility menu). */
+:root[data-theme="high-contrast"] {
+  --brand-700: #093a68;
+  --brand-600: #0b4a83; /* white text on this stays > 7:1 */
+  --brand-500: #0b4a83;
+  --brand-050: #eaf2fb;
+  --on-brand: #ffffff;
+  --ink-900: #000000;
+  --ink-600: #1c1c1c;
+  --surface: #ffffff;
+  --surface-2: #f2f2f2;
+  --bg: #ffffff;
+  --ok-700: #0a5c3d;
+  --ok-050: #e2f3ea;
+  --warn-700: #5f4300;
+  --warn-050: #f7efd8;
+  --danger-700: #8a2708;
+  --danger-050: #fbe6dc;
+  --border: #000000;
+  --border-ui: #000000;
+  --shadow-card: none;
+}
+
+/* --- accessibility-menu preferences (applied to <html>) ------------------ */
+html.a11y-readable-font {
+  --font-sans: var(--font-readable);
+}
+html.a11y-readable-font body {
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+}
+html.a11y-highlight-links a:not(.btn):not(.brand-link):not(.logo) {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+  font-weight: 700;
+}
+html.a11y-stop-animations *,
+html.a11y-stop-animations *::before,
+html.a11y-stop-animations *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
 }
 
 /* --- base ---------------------------------------------------------------- */
@@ -90,7 +156,7 @@ body {
   background: var(--bg);
   color: var(--ink-900);
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: clamp(1rem, 0.96rem + 0.3vw, 1.15rem);
   line-height: 1.6;
   font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
@@ -98,19 +164,20 @@ body {
 h1,
 h2,
 h3 {
-  line-height: 1.25;
+  line-height: 1.2;
   margin: 0 0 var(--space-3);
+  text-wrap: balance;
 }
 h1 {
-  font-size: 1.75rem;
-  font-weight: 600;
+  font-size: clamp(1.6rem, 1.1rem + 2.2vw, 2.6rem);
+  font-weight: 700;
 }
 h2 {
-  font-size: 1.2rem;
+  font-size: clamp(1.3rem, 1.05rem + 1vw, 1.8rem);
   font-weight: 600;
 }
 h3 {
-  font-size: 1.05rem;
+  font-size: clamp(1.05rem, 0.98rem + 0.4vw, 1.25rem);
   font-weight: 600;
 }
 p {
@@ -181,9 +248,9 @@ code {
   border-bottom: 1px solid var(--border);
 }
 .site-header__wrap {
-  max-width: var(--measure);
+  width: min(100% - 2rem, var(--container));
   margin-inline: auto;
-  padding: var(--space-3) var(--space-4);
+  padding-block: var(--space-3);
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -224,10 +291,17 @@ code {
 
 .page {
   flex: 1;
-  width: 100%;
-  max-width: var(--measure);
+  width: min(100% - 2rem, var(--container));
   margin-inline: auto;
-  padding: var(--space-6) var(--space-4) var(--space-8);
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+}
+/* Prose pages (about-data, privacy, accessibility) read best narrower. */
+.page--prose {
+  --container: var(--container-prose);
+}
+.page--prose p,
+.page--prose li {
+  max-width: 68ch;
 }
 
 .site-footer {
@@ -235,11 +309,11 @@ code {
   border-top: 1px solid var(--border);
 }
 .site-footer__wrap {
-  max-width: var(--measure);
+  width: min(100% - 2rem, var(--container));
   margin-inline: auto;
-  padding: var(--space-6) var(--space-4);
+  padding-block: var(--space-8);
   color: var(--ink-600);
-  font-size: 0.875rem;
+  font-size: 0.9rem;
 }
 .site-footer__wrap .disclaimer {
   margin: 0;
@@ -378,6 +452,14 @@ code {
   font-size: 0.95rem;
   margin: 0;
 }
+.feature--center {
+  text-align: center;
+  max-width: 640px;
+  margin-inline: auto;
+}
+.feature--center .feature__icon {
+  margin-inline: auto;
+}
 
 /* --- cards --------------------------------------------------------------- */
 .card {
@@ -411,11 +493,11 @@ code {
   margin-bottom: 0;
 }
 
-/* detail grid */
+/* detail grid — 2 cols on mobile, 3–4 on wide (uses the available width) */
 .dl-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3) var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-4);
   margin: var(--space-4) 0 0;
 }
 .dl-grid > div {
@@ -431,11 +513,36 @@ code {
   font-weight: 500;
   word-break: break-word;
 }
-@media (max-width: 380px) {
-  .dl-grid {
-    grid-template-columns: 1fr;
+
+/* --- result page two-column layout (≥900px) ------------------------------ */
+.result-layout {
+  display: grid;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+/* On mobile (single column) show status + actions first; DOM keeps the h1
+   (identity) before the h2s so heading order stays valid. On desktop the grid
+   areas below control placement and this order is ignored. */
+.result-aside {
+  order: -1;
+}
+@media (min-width: 900px) {
+  .result-layout {
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 32%, 380px);
+    grid-template-areas: "main aside";
+    align-items: start;
+  }
+  .result-main {
+    grid-area: main;
+    min-width: 0;
+  }
+  .result-aside {
+    grid-area: aside;
+    position: sticky;
+    top: clamp(1rem, 2vw, 2rem);
+    align-self: start;
   }
 }
+/* On mobile the status/actions come first (DOM order); no extra rule needed. */
 
 /* status rows */
 .status {
@@ -749,6 +856,287 @@ code {
 }
 .w-70 {
   width: 70%;
+}
+
+/* --- home sections ------------------------------------------------------- */
+.hero {
+  text-align: center;
+  padding-block: clamp(1.5rem, 5vw, 3.5rem) var(--space-6);
+}
+.hero__lede {
+  font-size: clamp(1.05rem, 1rem + 0.5vw, 1.3rem);
+  color: var(--ink-600);
+  max-width: 46ch;
+  margin-inline: auto;
+}
+.search--hero {
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+.section {
+  margin-top: var(--section-gap);
+}
+.section__head {
+  text-align: center;
+  max-width: 60ch;
+  margin-inline: auto;
+  margin-bottom: var(--space-6);
+}
+.section__head p {
+  color: var(--ink-600);
+  margin: 0;
+}
+
+/* how it works */
+.steps {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+@media (min-width: 720px) {
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-6) var(--space-4);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+.step__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--brand-050);
+  color: var(--brand-700);
+  display: grid;
+  place-items: center;
+  margin: 0 auto var(--space-3);
+}
+.step__icon .ic {
+  width: 28px;
+  height: 28px;
+}
+.step__kicker {
+  color: var(--brand-700);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.step p {
+  color: var(--ink-600);
+  margin: var(--space-1) 0 0;
+}
+
+/* FAQ (native details/summary — keyboard-accessible) */
+.faq {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 820px;
+  margin-inline: auto;
+}
+.faq details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+.faq summary {
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 44px;
+}
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq summary::after {
+  content: "+";
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--brand-600);
+  flex: none;
+}
+.faq details[open] summary::after {
+  content: "\2212"; /* minus */
+}
+.faq summary:focus-visible {
+  outline: 3px solid var(--brand-600);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.faq details p {
+  color: var(--ink-900);
+  margin: var(--space-3) 0 0;
+}
+
+/* --- richer footer ------------------------------------------------------- */
+.site-footer__grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 700px) {
+  .site-footer__grid {
+    grid-template-columns: 1.6fr 1fr 1fr;
+  }
+}
+.site-footer__col h2 {
+  font-size: 1rem;
+  margin-bottom: var(--space-2);
+  color: var(--ink-900);
+}
+.site-footer__col a {
+  display: block;
+  padding: var(--space-1) 0;
+  color: var(--brand-700);
+  text-decoration: none;
+  min-height: 32px;
+}
+.site-footer__col a:hover {
+  text-decoration: underline;
+}
+.site-footer__credit {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+.site-footer__credit .disclaimer {
+  margin: 0 0 var(--space-2);
+}
+
+/* --- accessibility menu (self-built, no third-party overlay) ------------- */
+.a11y-fab {
+  position: fixed;
+  inset-block-end: clamp(12px, 3vw, 20px);
+  inset-inline-start: clamp(12px, 3vw, 20px);
+  z-index: 90;
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: var(--brand-600);
+  color: var(--on-brand);
+  border: 2px solid var(--surface);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.28);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.a11y-fab .ic {
+  width: 30px;
+  height: 30px;
+}
+.a11y-fab:focus-visible {
+  outline: 3px solid var(--ink-900);
+  outline-offset: 3px;
+}
+
+.a11y-dialog {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0;
+  background: var(--surface);
+  color: var(--ink-900);
+  width: min(92vw, 380px);
+  max-height: 85vh;
+  box-shadow: 0 12px 44px rgba(15, 23, 42, 0.35);
+}
+.a11y-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.45);
+}
+.a11y-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+.a11y-dialog__head h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+.a11y-dialog__body {
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-4);
+  overflow: auto;
+}
+.a11y-group {
+  display: grid;
+  gap: var(--space-2);
+}
+.a11y-group__label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.a11y-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+}
+.a11y-btn {
+  font: inherit;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid var(--border-ui);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink-900);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+.a11y-btn--grow {
+  flex: 1 1 auto;
+}
+.a11y-btn[aria-pressed="true"] {
+  background: var(--brand-050);
+  border-color: var(--brand-600);
+  color: var(--brand-700);
+  font-weight: 600;
+}
+.a11y-btn:focus-visible {
+  outline: 3px solid var(--brand-600);
+  outline-offset: 2px;
+}
+.a11y-fontsize output {
+  min-width: 4ch;
+  text-align: center;
+  font-weight: 700;
+}
+.a11y-iconbtn {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  padding: 0;
+}
+.a11y-iconbtn .ic {
+  width: 22px;
+  height: 22px;
+}
+.a11y-dialog__foot {
+  padding: var(--space-4);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
 }
 
 @media (prefers-reduced-motion: reduce) {

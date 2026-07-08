@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test("home renders the value proposition and search", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/בדיקת רכב/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/הרכב/);
   await expect(page.getByRole("search")).toBeVisible();
   await expect(page.getByRole("button", { name: "חפש" })).toBeVisible();
 });

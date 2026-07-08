@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <main id="main" className="page">
+    <main id="main" className="page page--prose">
       <h1>פרטיות</h1>
       <p>
         האתר תוכנן כך שייאסף עליכם כמה שפחות מידע — בעצם, כמעט כלום. אין חשבונות, אין

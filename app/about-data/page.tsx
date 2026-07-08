@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function AboutDataPage() {
   return (
-    <main id="main" className="page">
+    <main id="main" className="page page--prose">
       <h1>מאיפה הנתונים?</h1>
       <p>
         כל הנתונים באתר מגיעים ממאגרי המידע הפתוחים הרשמיים של משרד התחבורה, דרך{" "}
